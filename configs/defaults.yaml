@@ -1,0 +1,3 @@
+# Default keyword rules for NON_PROCUREMENT (used when a config says  exclusion.use_defaults: true).
+# They are matched against the columns the config lists under exclusion.default_columns.
+non_procurement_regex: '(\bsales tax\b|\bvat\b|\bgst\b|withholding tax|income tax|payroll tax|duty and tax|\bintercompany\b|inter-company|inter company|\bi/c\b|^ic\d*\b|\bic payable|royalt(y|ies)|dividend|interest expense|loan interest|bank charge|bank fee|\brevenue\b|\bcommission income\b|partner billing|\bmanagement fee\b|salary|salaries|payroll)'

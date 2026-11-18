@@ -1,0 +1,29 @@
+# Company B: one file, 8 ERPs, 25 currencies, vendor ids only.
+name: B
+mode: single_system
+reporting_currency: USD
+output_prefix: B
+supplier_kind: id                 # no supplier names, only vendor ids
+file: {path: data/company_B/invoice_lines.csv, id_col: line_id}
+columns:
+  amount: line_amount
+  currency: currency
+  rate: currency_rate             # units of line currency per 1 USD
+  posting_date: posting_date
+  invoice_date: invoice_date
+  supplier: vendor_id
+  item_code: material_number
+  po: po_number
+  text_cols: [line_description]
+fx: {path: data/company_B/fx_rates_usd.csv, currency_col: currency, month_col: month, rate_col: units_per_usd}
+exclusion:
+  use_defaults: true
+  default_columns: [gl_account_description, line_description]
+  rules:
+    - {column: gl_account_description, regex: '(^|\b)(i/c|ic\d*\b|ic payable|intercompany)', reason: NON_PROCUREMENT}
+  learn_from_labels: [gl_account_description, supplier_type, vendor_id]   # only used when labels exist
+  min_rows: 5
+  min_rate: 0.9
+taxonomy: {path: data/company_B/taxonomy_B.csv}
+labels: {path: data/company_B/seed_labels.csv, id_col: line_id, include_col: include, reason_col: exclusion_reason,
+         level_cols: [category_l1, category_l2, category_l3]}

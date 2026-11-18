@@ -1,0 +1,10 @@
+data/
+*.zip
+*.pdf
+company_A/
+company_B/
+company_C/
+__pycache__/
+.venv/
+.env
+output/

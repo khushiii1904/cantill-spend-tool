@@ -1,0 +1,43 @@
+# Company A: two systems (SAP goods receipts + accounts-payable tool).  New company = new config, no new code.
+name: A
+mode: two_system
+reporting_currency: ZAR
+default_vat: 0.15
+output_prefix: A
+
+erp:                      # system 1: already NET of tax
+  path: data/company_A/erp_goods_receipts.csv
+  id_col: line_id
+  id_prefix: "ERP:"
+  amount_col: value_zar
+  po_col: po_number
+  supplier_col: supplier_name
+  item_code_col: material_number
+  text_cols: [material_short_text, service_short_text]
+
+tool:                     # system 2: GROSS amounts, includes status
+  path: data/company_A/invoice_tool_export.csv
+  id_col: tool_record_id
+  id_prefix: "TOOL:"
+  amount_col: gross_amount
+  vat_col: vat_rate
+  po_col: po_reference
+  supplier_col: supplier_name_as_captured
+  text_cols: [line_text]
+  invoice_col: invoice_number
+  status_col: status
+  approved_values: [approved, paid]
+  cancelled_values: [cancelled]
+
+match:
+  amount_tolerance: 0.005      # 0.5 % relative (or < 1 currency unit)
+  supplier_similarity: 0.90    # fuzzy threshold for merging spellings of one supplier
+
+taxonomy:
+  path: data/company_A/taxonomy_A.csv
+labels:                                  # optional: used for training if present, and for evaluation
+  path: data/company_A/labels_A.csv
+  id_col: record_id
+  level_cols: [category_l1, category_l2, category_l3]
+  supplier_col: supplier_key
+  item_col: item_key
